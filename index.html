@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>С днем рождения, бабушка!</title>
+    <style>
+        body {
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .handwriting {
+            font-family: "Caveat", cursive;
+            font-size: 50px;
+            color: #333;
+            position: relative;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        .handwriting::after {
+            content: "|";
+            animation: blink 1s infinite;
+            color: #333;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .paper {
+            background-color: #fff9e6;
+            padding: 40px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+            max-width: 800px;
+        }
+
+        .paper::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 40px;
+            width: 2px;
+            background: rgba(255, 0, 0, 0.67);
+        }
+
+        .signature {
+            font-family: "Caveat", cursive;
+            font-size: 40px;
+            color: #d32f2f;
+            margin-top: 30px;
+            text-align: right;
+            opacity: 0;
+        }
+
+        .fade-in {
+            animation: fade-in 1s ease-in forwards;
+            -webkit-animation: fade-in 1s ease-in forwards;
+        }
+
+        @keyframes fade-in {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .handwriting {
+            color: rgba(255, 0, 0, 0.45);
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<div class="paper">
+    <div class="handwriting" id="message"></div>
+    <div class="signature" id="signature">С бесконечной любовью, Семён</div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        const text = "Дорогая бабушка! Поздравляю тебя с Днем рождения! \n" +
+            "Желаю крепчайшего здоровья, частого общения со старыми друзьями, больше свободного времени! \n" +
+            "Надеюсь, что в этом году ты будешь проводить больше времени с семьей!  \n" +
+            "Спасибо за помощь нам и нашим родителям! Спасибо за заботу!\n" +
+            "В этом году ты сможешь исполнить все свои мечты!\n❤️❤️❤️";
+        const $message = $('#message');
+        const $signature = $('#signature');
+        const $image = $('.fade-in');
+
+        let i = 0;
+        let line = 0;
+        const lines = text.split('\n');
+
+        function typeWriter() {
+            if (line < lines.length) {
+                if (i < lines[line].length) {
+                    $message.append(lines[line].charAt(i));
+                    i++;
+
+                    // Случайная задержка для эффекта рукописного ввода
+                    const speed = Math.random() * 200 + 50;
+                    setTimeout(typeWriter, speed);
+                } else {
+                    // Переход на новую строку
+                    $message.append('\n');
+                    line++;
+                    i = 0;
+
+                    // Пауза между строками
+                    setTimeout(typeWriter, 500);
+                }
+            } else {
+                // Текст полностью написан
+                $message.css('animation', 'none');
+                $message.find('::after').remove();
+
+                // Показываем подпись через секунду
+                setTimeout(() => {
+                    $signature.addClass('fade-in');
+                    $image.show();
+                }, 1000);
+            }
+        }
+
+        // Начинаем печатать через небольшую паузу
+        setTimeout(typeWriter, 500);
+    });
+</script>
+</body>
+</html>
